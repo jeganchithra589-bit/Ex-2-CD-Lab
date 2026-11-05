@@ -33,61 +33,43 @@
 # Program
 
 ```
+%{
 #include <stdio.h>
 #include <ctype.h>
-#include <string.h>
+%}
 
-int main()
-{
-    char s[100];
-    int i = 0;
+%%
 
-    printf("Enter the input: ");
-    fgets(s, sizeof(s), stdin);
+"if"        { printf("Keyword: %s\n", yytext); }
+"else"      { printf("Keyword: %s\n", yytext); }
+"while"     { printf("Keyword: %s\n", yytext); }
+"for"       { printf("Keyword: %s\n", yytext); }
 
-    while (s[i] != '\0')
-    {
-        if (isspace(s[i]))
-        {
-            i++;
-        }
-        else if (isalpha(s[i]) || s[i] == '_')
-        {
-            printf("Identifier: ");
-            while (isalnum(s[i]) || s[i] == '_')
-                printf("%c", s[i++]);
-            printf("\n");
-        }
-        else if (isdigit(s[i]))
-        {
-            printf("Number: ");
-            while (isdigit(s[i]))
-                printf("%c", s[i++]);
-            printf("\n");
-        }
-        else if (strchr("+-*/=", s[i]))
-        {
-            printf("Operator: %c\n", s[i]);
-            i++;
-        }
-        else
-        {
-            printf("Special Symbol: %c\n", s[i]);
-            i++;
-        }
-    }
+[0-9]+      { printf("Number: %s\n", yytext); }
+[a-zA-Z_][a-zA-Z0-9_]*   { printf("Identifier: %s\n", yytext); }
 
+"=="|"="    { printf("Operator: %s\n", yytext); }
+"+"|"-"|"*"|"/" { printf("Operator: %s\n", yytext); }
+
+[ \t\n]     ;   // Ignore whitespace
+.           { printf("Unknown: %s\n", yytext); }
+
+%%
+
+int main(int argc, char **argv) {
+    yylex();
     return 0;
 }
+
+int yywrap() {
+    return 1;
+}
+
 ```
-
-# INPUT
-
-input a = 10 + 20
 
 # OUTPUT
 
-<img width="885" height="517" alt="image" src="https://github.com/user-attachments/assets/7b122954-430a-4b88-baa4-9526b829e729" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/63b28300-f28a-4c13-ae73-6fbebd972538" />
 
 # RESULT
 ## The lexical analyzer is implemented using lex and the output is verified.
